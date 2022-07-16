@@ -2,7 +2,8 @@ import { ColorPicker } from "../components/ColorPicker";
 import { eraser, zoomIn, zoomOut } from "../components/icons";
 import { ToolButton } from "../components/ToolButton";
 import { DarkModeToggle } from "../components/DarkModeToggle";
-import { THEME, ZOOM_STEP } from "../constants";
+import { RecordButtonToggle } from "../components/RecordButtonToggle";
+import { RECORD, THEME, ZOOM_STEP } from "../constants";
 import { getCommonBounds, getNonDeletedElements } from "../element";
 import { ExcalidrawElement } from "../element/types";
 import { t } from "../i18n";
@@ -293,6 +294,32 @@ export const actionToggleTheme = register({
         value={appState.theme}
         onChange={(theme) => {
           updateData(theme);
+        }}
+      />
+    </div>
+  ),
+  keyTest: (event) => event.altKey && event.shiftKey && event.code === CODES.D,
+});
+
+export const actionToggleRecord = register({
+  name: "toggleRecord",
+  trackEvent: { category: "canvas" },
+  perform: (_, appState, value) => {
+    return {
+      appState: {
+        ...appState,
+        record:
+          value || (appState.record === RECORD.PLAY ? RECORD.PAUSE : RECORD.PLAY),
+      },
+      commitToHistory: false,
+    };
+  },
+  PanelComponent: ({ appState, updateData }) => (
+    <div style={{ marginInlineStart: "0.25rem" }}>
+      <RecordButtonToggle
+        value={appState.record}
+        onChange={(record) => {
+          updateData(record);
         }}
       />
     </div>

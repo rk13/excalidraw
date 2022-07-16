@@ -13,6 +13,7 @@ import {
   FileId,
   ExcalidrawImageElement,
   Theme,
+  Record123,
 } from "./element/types";
 import { SHAPES } from "./shapes";
 import { Point as RoughPoint } from "roughjs/bin/geometry";
@@ -110,6 +111,7 @@ export type AppState = {
   exportBackground: boolean;
   exportEmbedScene: boolean;
   exportWithDarkMode: boolean;
+  exportWithRecordButton: boolean;
   exportScale: number;
   currentItemStrokeColor: string;
   currentItemBackgroundColor: string;
@@ -148,6 +150,7 @@ export type AppState = {
   toast: { message: string; closable?: boolean; duration?: number } | null;
   zenModeEnabled: boolean;
   theme: Theme;
+  record: Record123;
   gridSize: number | null;
   viewModeEnabled: boolean;
 
@@ -287,6 +290,7 @@ export interface ExcalidrawProps {
   gridModeEnabled?: boolean;
   libraryReturnUrl?: string;
   theme?: Theme;
+  record?: Record123;
   name?: string;
   renderCustomStats?: (
     elements: readonly NonDeletedExcalidrawElement[],
@@ -350,6 +354,7 @@ type CanvasActions = {
   loadScene?: boolean;
   saveToActiveFile?: boolean;
   theme?: boolean;
+  record?: boolean;
   saveAsImage?: boolean;
 };
 

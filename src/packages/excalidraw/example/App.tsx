@@ -107,6 +107,7 @@ export default function App() {
   const [blobUrl, setBlobUrl] = useState<string>("");
   const [canvasUrl, setCanvasUrl] = useState<string>("");
   const [exportWithDarkMode, setExportWithDarkMode] = useState(false);
+  const [exportWithRecordButton, setExportWithRecordButton] = useState(false);
   const [exportEmbedScene, setExportEmbedScene] = useState(false);
   const [theme, setTheme] = useState("light");
   const [isCollaborating, setIsCollaborating] = useState(false);
@@ -687,6 +688,7 @@ export default function App() {
                 appState: {
                   ...initialData.appState,
                   exportWithDarkMode,
+                  exportWithRecordButton,
                   exportEmbedScene,
                   width: 300,
                   height: 100,
@@ -711,6 +713,7 @@ export default function App() {
                   ...initialData.appState,
                   exportEmbedScene,
                   exportWithDarkMode,
+                  exportWithRecordButton,
                 },
                 files: excalidrawAPI?.getFiles(),
               });
@@ -730,6 +733,7 @@ export default function App() {
                 appState: {
                   ...initialData.appState,
                   exportWithDarkMode,
+                  exportWithRecordButton,
                 },
                 files: excalidrawAPI?.getFiles(),
               });
