@@ -51,6 +51,7 @@ class Scene {
   private nonDeletedElements: readonly NonDeletedExcalidrawElement[] = [];
   private elements: readonly ExcalidrawElement[] = [];
   private elementsMap = new Map<ExcalidrawElement["id"], ExcalidrawElement>();
+  private lastSnapshotTimestamp: number = 0;
 
   // ts -> elements
   private elementsSnapshots = new Map<Number, ExcalidrawElement[]>();
@@ -89,8 +90,10 @@ class Scene {
       Scene.mapElementToScene(element, this);
     });
     this.nonDeletedElements = getNonDeletedElements(this.elements);
-    if (!this.elementsAlreadyExist(this.nonDeletedElements)) {
+    const snapshotTimestamp = Date.now();
+    if (snapshotTimestamp - this.lastSnapshotTimestamp > 10 * 1000) {
       this.elementsSnapshots.set(Date.now(), [...this.nonDeletedElements]);
+      this.lastSnapshotTimestamp = snapshotTimestamp;
     }
     this.informMutation();
   }
