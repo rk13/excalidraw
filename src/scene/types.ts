@@ -11,6 +11,7 @@ export type RenderConfig = {
   zoom: AppState["zoom"];
   shouldCacheIgnoreZoom: AppState["shouldCacheIgnoreZoom"];
   theme: AppState["theme"];
+  record: AppState["record"];
   // collab-related state
   // ---------------------------------------------------------------------------
   remotePointerViewportCoords: { [id: string]: { x: number; y: number } };

@@ -1085,7 +1085,7 @@ class App extends React.Component<AppProps, AppState> {
       this.state.activeTool.type === "eraser" &&
       prevState.theme !== this.state.theme
     ) {
-      setEraserCursor(this.canvas, this.state.theme);
+      setEraserCursor(this.canvas, this.state.theme, this.state.record);
     }
     // Hide hyperlink popup if shown when element type is not selection
     if (
@@ -1237,6 +1237,7 @@ class App extends React.Component<AppProps, AppState> {
         remotePointerUserStates: pointerUserStates,
         shouldCacheIgnoreZoom: this.state.shouldCacheIgnoreZoom,
         theme: this.state.theme,
+        record: this.state.record,
         imageCache: this.imageCache,
         isExporting: false,
         renderScrollbars: !this.device.isMobile,
