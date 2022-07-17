@@ -334,61 +334,62 @@ export const exportToBackend = async (
     console.error(error);
     window.alert(t("alerts.couldNotCreateShareableLink"));
   }
+};
 
-  export const exportSnapshotsToBackend = async (
-    elementSnapshots: readonly Map<Number, ExcalidrawElement[]>,
-    appState: AppState,
-    files: BinaryFiles,
-  ) => {
-    const encryptionKey = await generateEncryptionKey("string");
+export const exportSnapshotsToBackend = async (
+  elementSnapshots: ExcalidrawElement[],
+  // Map<Number, ExcalidrawElement[]>
+  appState: AppState,
+  files: BinaryFiles,
+) => {
+  const encryptionKey = await generateEncryptionKey("string");
 
-    const payload = await compressData(
-      new TextEncoder().encode(
-        serializeAsJSON(elements, appState, files, "database"),
-      ),
-      { encryptionKey },
-    );
+  const payload = await compressData(
+    new TextEncoder().encode(
+      serializeAsJSON(elementSnapshots, appState, files, "database"),
+    ),
+    { encryptionKey },
+  );
 
-    try {
-      const filesMap = new Map<FileId, BinaryFileData>();
-      for (const element of elements) {
-        if (isInitializedImageElement(element) && files[element.fileId]) {
-          filesMap.set(element.fileId, files[element.fileId]);
-        }
+  try {
+    const filesMap = new Map<FileId, BinaryFileData>();
+    for (const element of elementSnapshots) {
+      if (isInitializedImageElement(element) && files[element.fileId]) {
+        filesMap.set(element.fileId, files[element.fileId]);
       }
+    }
 
-      const filesToUpload = await encodeFilesForUpload({
-        files: filesMap,
-        encryptionKey,
-        maxBytes: FILE_UPLOAD_MAX_BYTES,
+    const filesToUpload = await encodeFilesForUpload({
+      files: filesMap,
+      encryptionKey,
+      maxBytes: FILE_UPLOAD_MAX_BYTES,
+    });
+
+    const response = await fetch(BACKEND_V2_POST, {
+      method: "POST",
+      body: payload.buffer,
+    });
+    const json = await response.json();
+    if (json.id) {
+      const url = new URL(window.location.href);
+      // We need to store the key (and less importantly the id) as hash instead
+      // of queryParam in order to never send it to the server
+      url.hash = `json=${json.id},${encryptionKey}`;
+      const urlString = url.toString();
+
+      await saveFilesToFirebase({
+        prefix: `/files/shareLinks/${json.id}`,
+        files: filesToUpload,
       });
 
-      const response = await fetch(BACKEND_V2_POST, {
-        method: "POST",
-        body: payload.buffer,
-      });
-      const json = await response.json();
-      if (json.id) {
-        const url = new URL(window.location.href);
-        // We need to store the key (and less importantly the id) as hash instead
-        // of queryParam in order to never send it to the server
-        url.hash = `json=${json.id},${encryptionKey}`;
-        const urlString = url.toString();
-
-        await saveFilesToFirebase({
-          prefix: `/files/shareLinks/${json.id}`,
-          files: filesToUpload,
-        });
-
-        window.prompt(`🔒${t("alerts.uploadedSecurly")}`, urlString);
-      } else if (json.error_class === "RequestTooLargeError") {
-        window.alert(t("alerts.couldNotCreateShareableLinkTooBig"));
-      } else {
-        window.alert(t("alerts.couldNotCreateShareableLink"));
-      }
-    } catch (error: any) {
-      console.error(error);
+      window.prompt(`🔒${t("alerts.uploadedSecurly")}`, urlString);
+    } else if (json.error_class === "RequestTooLargeError") {
+      window.alert(t("alerts.couldNotCreateShareableLinkTooBig"));
+    } else {
       window.alert(t("alerts.couldNotCreateShareableLink"));
     }
-  };
+  } catch (error: any) {
+    console.error(error);
+    window.alert(t("alerts.couldNotCreateShareableLink"));
+  }
 };
