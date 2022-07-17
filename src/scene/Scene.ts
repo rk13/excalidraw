@@ -59,6 +59,10 @@ class Scene {
     return this.elements;
   }
 
+  getElementsSnapshots() {
+    return this.elementsSnapshots;
+  }
+
   getNonDeletedElements(): readonly NonDeletedExcalidrawElement[] {
     return this.nonDeletedElements;
   }
@@ -85,7 +89,38 @@ class Scene {
       Scene.mapElementToScene(element, this);
     });
     this.nonDeletedElements = getNonDeletedElements(this.elements);
+    if (!this.elementsAlreadyExist(this.nonDeletedElements)) {
+      this.elementsSnapshots.set(Date.now(), [...this.nonDeletedElements]);
+    }
     this.informMutation();
+  }
+
+  elementsAlreadyExist(elements: readonly ExcalidrawElement[]): boolean {
+    const currentSnapshot = new Set<string>();
+    this.elementsSnapshots.forEach((existingElements: ExcalidrawElement[]) => {
+      let str = "";
+      existingElements.forEach((element) => {
+        str += `${
+          element.updated +
+          element.type +
+          element.isDeleted +
+          element.angle +
+          element.backgroundColor
+        },`;
+      });
+      currentSnapshot.add(str);
+    });
+    let str = "";
+    elements.forEach((element) => {
+      str += `${
+        element.updated +
+        element.type +
+        element.isDeleted +
+        element.angle +
+        element.backgroundColor
+      },`;
+    });
+    return currentSnapshot.has(str);
   }
 
   informMutation() {

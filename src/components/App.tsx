@@ -1268,6 +1268,7 @@ class App extends React.Component<AppProps, AppState> {
     if (!this.state.isLoading) {
       this.props.onChange?.(
         this.scene.getElementsIncludingDeleted(),
+        this.scene.getElementsSnapshots(),
         this.state,
         this.files,
       );
