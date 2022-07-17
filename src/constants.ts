@@ -77,6 +77,11 @@ export const THEME = {
   DARK: "dark",
 };
 
+export const RECORD = {
+  PLAY: "play",
+  PAUSE: "pause",
+};
+
 export const WINDOWS_EMOJI_FALLBACK_FONT = "Segoe UI Emoji";
 
 export const DEFAULT_FONT_SIZE = 20;
@@ -150,6 +155,7 @@ export const DEFAULT_UI_OPTIONS: AppProps["UIOptions"] = {
     loadScene: true,
     saveToActiveFile: true,
     theme: true,
+    record: true,
     saveAsImage: true,
   },
 };

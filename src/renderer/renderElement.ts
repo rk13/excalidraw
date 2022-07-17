@@ -840,6 +840,8 @@ export const renderElementToSvg = (
   offsetX?: number,
   offsetY?: number,
   exportWithDarkMode?: boolean,
+  exportWithRecordButton?: boolean,
+
 ) => {
   const [x1, y1, x2, y2] = getElementAbsoluteCoords(element);
   const cx = (x2 - x1) / 2 - (element.x - x1);

@@ -62,6 +62,7 @@ export const exportToCanvas = async (
     remotePointerUsernames: {},
     remotePointerUserStates: {},
     theme: appState.exportWithDarkMode ? "dark" : "light",
+    record: appState.exportWithRecordButton ? "play" : "pause",
     imageCache,
     renderScrollbars: false,
     renderSelection: false,
@@ -80,6 +81,7 @@ export const exportToSvg = async (
     exportScale?: number;
     viewBackgroundColor: string;
     exportWithDarkMode?: boolean;
+    exportWithRecordButton?: boolean;
     exportEmbedScene?: boolean;
   },
   files: BinaryFiles | null,
@@ -160,6 +162,7 @@ export const exportToSvg = async (
     offsetX: -minX + exportPadding,
     offsetY: -minY + exportPadding,
     exportWithDarkMode: appState.exportWithDarkMode,
+    exportWithRecordButton: appState.exportWithRecordButton,
   });
 
   return svgRoot;

@@ -7,6 +7,7 @@ import {
   EVENT,
   FONT_FAMILY,
   MIME_TYPES,
+  RECORD,
   THEME,
   WINDOWS_EMOJI_FALLBACK_FONT,
 } from "./constants";
@@ -258,13 +259,16 @@ let previewDataURL: string;
 export const setEraserCursor = (
   canvas: HTMLCanvasElement | null,
   theme: AppState["theme"],
+  record: AppState["record"],
 ) => {
   const cursorImageSizePx = 20;
 
   const drawCanvas = () => {
     const isDarkTheme = theme === THEME.DARK;
+    const isRecordEnabled = record === RECORD.PLAY;
     eraserCanvasCache = document.createElement("canvas");
     eraserCanvasCache.theme = theme;
+    eraserCanvasCache.record = record;
     eraserCanvasCache.height = cursorImageSizePx;
     eraserCanvasCache.width = cursorImageSizePx;
     const context = eraserCanvasCache.getContext("2d")!;
@@ -305,7 +309,7 @@ export const setCursorForShape = (
   if (appState.activeTool.type === "selection") {
     resetCursor(canvas);
   } else if (appState.activeTool.type === "eraser") {
-    setEraserCursor(canvas, appState.theme);
+    setEraserCursor(canvas, appState.theme, appState.record);
     // do nothing if image tool is selected which suggests there's
     // a image-preview set as the cursor
     // Ignore custom type as well and let host decide
