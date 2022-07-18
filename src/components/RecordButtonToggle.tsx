@@ -57,7 +57,11 @@ export const RecordButtonToggle = (props: {
                   title={t("exportDialog.link_button2")}
                   aria-label={t("exportDialog.link_button2")}
                   showAriaLabel={true}
-                  onClick={() => {}}
+                  onClick={() => {
+                    alert(
+                      "http://localhost:3000/#room=4c219fb8f0b34216b821,8VY5tsCMmQWU4ZQ3qGPfvA",
+                    );
+                  }}
                 />
               </Card>
             </div>
